@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Statistikkbanken Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f3f0e7;
+      --paper: #fffdf7;
+      --ink: #1e241f;
+      --muted: #5f6a62;
+      --line: #d7d8cd;
+      --accent: #0f7666;
+      --danger: #a2362c;
+      --ok: #1d7d3d;
+      --radius: 14px;
+      --shadow: 0 14px 34px rgba(33, 44, 37, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Manrope, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 14%, rgba(15, 118, 102, 0.24), transparent 30%),
+        radial-gradient(circle at 88% 10%, rgba(253, 214, 144, 0.35), transparent 26%),
+        linear-gradient(155deg, #f7f4ec, #ebe6d7);
+      padding: 18px;
+    }
+
+    .layout {
+      max-width: 1460px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--paper) 90%, white);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.2));
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .panel-head h1,
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.08rem;
+      letter-spacing: 0.2px;
+    }
+
+    .panel-head p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .panel-body {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 9px;
+    }
+
+    .field {
+      display: grid;
+      gap: 5px;
+    }
+
+    .field.inline {
+      grid-template-columns: 150px 1fr;
+      align-items: center;
+      gap: 10px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea,
+    button {
+      width: 100%;
+      font: inherit;
+      color: inherit;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+    }
+
+    input,
+    textarea {
+      padding: 10px;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 108px;
+      resize: vertical;
+      font-family: "IBM Plex Mono", Consolas, monospace;
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: end;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      width: auto;
+      padding: 10px 14px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform 120ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      background: linear-gradient(130deg, #0f7666, #118a77);
+      color: #fff;
+    }
+
+    .secondary {
+      border: 1px solid #cfd7ca;
+      background: #edf3e8;
+      color: #3f5144;
+    }
+
+    .status {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .status.ok {
+      color: var(--ok);
+    }
+
+    .status.err {
+      color: var(--danger);
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .kpi {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .kpi .key {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    .kpi .val {
+      margin-top: 6px;
+      font-size: 1.18rem;
+      font-weight: 800;
+    }
+
+    .table-wrap {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: auto;
+      max-height: 360px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #eceee7;
+      text-align: left;
+      padding: 8px 10px;
+      vertical-align: top;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #f6f9f2;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #4e5e52;
+    }
+
+    .empty {
+      padding: 24px;
+      text-align: center;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .box {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .box h3 {
+      margin: 0;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      color: #55655b;
+      letter-spacing: 0.05em;
+      background: #f6f9f2;
+    }
+
+    pre {
+      margin: 0;
+      max-height: 220px;
+      overflow: auto;
+      padding: 10px;
+      font-family: "IBM Plex Mono", Consolas, monospace;
+      font-size: 0.78rem;
+      line-height: 1.42;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    ul.events {
+      margin: 0;
+      padding: 10px;
+      list-style: none;
+      max-height: 180px;
+      overflow: auto;
+      display: grid;
+      gap: 6px;
+    }
+
+    ul.events li {
+      border-left: 3px solid #a6b9aa;
+      padding-left: 8px;
+      font-size: 0.8rem;
+      color: #3e4e44;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 1120px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 10px;
+      }
+
+      .kpis {
+        grid-template-columns: 1fr;
+      }
+
+      .field.inline {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="layout">
+    <section class="panel">
+      <header class="panel-head">
+        <div>
+          <h1>Ny statistikk-side (2/3)</h1>
+          <p>Frontend kaller egen backend, ikke UDIR direkte.</p>
+        </div>
+        <span class="status" id="statusText">Klar</span>
+      </header>
+
+      <div class="panel-body">
+        <section class="controls">
+          <div class="field inline">
+            <label for="radSti">Query parameter radSti</label>
+            <input id="radSti" type="text" value="F" />
+          </div>
+
+          <div class="field">
+            <label for="payload">Payload til backend</label>
+            <textarea id="payload" spellcheck="false"></textarea>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Frontend - backend</label>
+              <input type="text" value="POST /api/statistikk" disabled />
+            </div>
+            <div class="buttons">
+              <button class="primary" id="sendBtn" type="button">Send request</button>
+              <button class="secondary" id="resetBtn" type="button">Reset</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="kpis">
+          <article class="kpi">
+            <div class="key">HTTP status</div>
+            <div class="val" id="kpiStatus">-</div>
+          </article>
+          <article class="kpi">
+            <div class="key">Tid</div>
+            <div class="val" id="kpiTime">-</div>
+          </article>
+          <article class="kpi">
+            <div class="key">Rader</div>
+            <div class="val" id="kpiRows">-</div>
+          </article>
+          <article class="kpi">
+            <div class="key">Nokler</div>
+            <div class="val" id="kpiKeys">-</div>
+          </article>
+        </section>
+
+        <section class="table-wrap" id="tableWrap">
+          <div class="empty">Ingen data ennaa. Start backend og send en request.</div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <header class="panel-head">
+        <div>
+          <h2>Under panseret (1/3)</h2>
+          <p>Viser request til backend og response tilbake.</p>
+        </div>
+      </header>
+
+      <div class="panel-body">
+        <section class="box">
+          <h3>Request</h3>
+          <pre id="requestView">Ingen request sendt.</pre>
+        </section>
+
+        <section class="box">
+          <h3>Response meta</h3>
+          <pre id="metaView">Ingen response mottatt.</pre>
+        </section>
+
+        <section class="box">
+          <h3>Response body</h3>
+          <pre id="bodyView">Ingen payload ennaa.</pre>
+        </section>
+
+        <section class="box">
+          <h3>Transform preview</h3>
+          <pre id="transformView">Ingen transformasjon ennaa.</pre>
+        </section>
+
+        <section class="box">
+          <h3>Event log</h3>
+          <ul class="events" id="events"></ul>
+        </section>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const radStiInput = document.getElementById("radSti");
+    const payloadInput = document.getElementById("payload");
+    const sendBtn = document.getElementById("sendBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    const statusText = document.getElementById("statusText");
+    const kpiStatus = document.getElementById("kpiStatus");
+    const kpiTime = document.getElementById("kpiTime");
+    const kpiRows = document.getElementById("kpiRows");
+    const kpiKeys = document.getElementById("kpiKeys");
+    const tableWrap = document.getElementById("tableWrap");
+
+    const requestView = document.getElementById("requestView");
+    const metaView = document.getElementById("metaView");
+    const bodyView = document.getElementById("bodyView");
+    const transformView = document.getElementById("transformView");
+    const events = document.getElementById("events");
+
+    payloadInput.value = "EierformID(-10)_EnhetID(*)_FagID(-12_6457_30980_32127)_KaraktertypeID(1)_KjoennID(-10)_TidID(202506)_UtdanningsprogramvariantID(-10)_VisAntallPersoner(1)_VisKarakterfordeling(0)";
+
+    function addEvent(message) {
+      const ts = new Date().toLocaleTimeString("no-NO");
+      const item = document.createElement("li");
+      item.textContent = "[" + ts + "] " + message;
+      events.prepend(item);
+      while (events.children.length > 14) {
+        events.removeChild(events.lastChild);
+      }
+    }
+
+    function setStatus(text, cssClass) {
+      statusText.textContent = text;
+      statusText.className = "status" + (cssClass ? " " + cssClass : "");
+    }
+
+    function pretty(value) {
+      try {
+        return JSON.stringify(value, null, 2);
+      } catch (_error) {
+        return String(value);
+      }
+    }
+
+    function getRows(payload) {
+      if (Array.isArray(payload)) {
+        return payload;
+      }
+      if (!payload || typeof payload !== "object") {
+        return [];
+      }
+      const keys = ["data", "value", "items", "results", "dataset", "observations", "tabell"];
+      for (const key of keys) {
+        if (Array.isArray(payload[key])) {
+          return payload[key];
+        }
+      }
+      return [payload];
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function renderTable(rows) {
+      if (!rows.length || typeof rows[0] !== "object") {
+        tableWrap.innerHTML = "<div class=\"empty\">Fant ingen tabellignende data i responsen.</div>";
+        kpiRows.textContent = "0";
+        kpiKeys.textContent = "0";
+        transformView.textContent = pretty({
+          note: "Responsen var ikke en liste med objekt-rader.",
+          rowsDetected: rows.length
+        });
+        return;
+      }
+
+      const columns = Object.keys(rows[0]).slice(0, 10);
+      const topRows = rows.slice(0, 30);
+      const head = columns.map((col) => "<th>" + escapeHtml(col) + "</th>").join("");
+      const body = topRows.map((row) => {
+        const tds = columns.map((col) => "<td>" + escapeHtml(row[col] ?? "") + "</td>").join("");
+        return "<tr>" + tds + "</tr>";
+      }).join("");
+
+      tableWrap.innerHTML = "<table><thead><tr>" + head + "</tr></thead><tbody>" + body + "</tbody></table>";
+      kpiRows.textContent = String(rows.length);
+      kpiKeys.textContent = String(columns.length);
+      transformView.textContent = pretty({
+        transformRule: "Viser forste array med opptil 30 rader.",
+        rowsDetected: rows.length,
+        columnsShown: columns,
+        sample: rows.slice(0, 3)
+      });
+    }
+
+    async function sendRequest() {
+      const radSti = radStiInput.value.trim() || "F";
+      const payload = payloadInput.value.trim();
+
+      if (!payload) {
+        setStatus("Mangler payload", "err");
+        addEvent("Kan ikke sende request uten payload.");
+        return;
+      }
+
+      const requestModel = {
+        method: "POST",
+        url: "/api/statistikk",
+        body: {
+          radSti,
+          payload
+        },
+        sentAt: new Date().toISOString()
+      };
+
+      requestView.textContent = pretty(requestModel);
+      setStatus("Laster...", "");
+      addEvent("Sender request til egen backend.");
+
+      const start = performance.now();
+
+      try {
+        const response = await fetch("/api/statistikk", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ radSti, payload })
+        });
+
+        const end = performance.now();
+        const ms = Math.round(end - start);
+        const json = await response.json();
+        const payloadBody = json.body;
+        const rows = getRows(payloadBody);
+
+        kpiStatus.textContent = String(response.status);
+        kpiTime.textContent = ms + " ms";
+        bodyView.textContent = pretty(payloadBody);
+        metaView.textContent = pretty({
+          backendStatus: response.status,
+          durationMs: ms,
+          upstream: json.upstream
+        });
+        renderTable(rows);
+
+        if (response.ok) {
+          setStatus("Oppdatert", "ok");
+          addEvent("Backend svarte OK og UI ble oppdatert.");
+        } else {
+          setStatus("Backend-feil", "err");
+          addEvent("Backend svarte med HTTP " + response.status + ".");
+        }
+      } catch (error) {
+        kpiStatus.textContent = "-";
+        kpiTime.textContent = "-";
+        kpiRows.textContent = "-";
+        kpiKeys.textContent = "-";
+        metaView.textContent = pretty({ error: error.message });
+        bodyView.textContent = "Ingen response body. Sjekk at backend kjorer.";
+        transformView.textContent = "Ingen transformasjon pga feil.";
+        tableWrap.innerHTML = "<div class=\"empty\">Klarte ikke hente data fra backend.</div>";
+        setStatus("Request feilet", "err");
+        addEvent("Frontend klarte ikke naa backend: " + error.message);
+      }
+    }
+
+    function resetView() {
+      setStatus("Klar", "");
+      kpiStatus.textContent = "-";
+      kpiTime.textContent = "-";
+      kpiRows.textContent = "-";
+      kpiKeys.textContent = "-";
+      requestView.textContent = "Ingen request sendt.";
+      metaView.textContent = "Ingen response mottatt.";
+      bodyView.textContent = "Ingen payload ennaa.";
+      transformView.textContent = "Ingen transformasjon ennaa.";
+      tableWrap.innerHTML = "<div class=\"empty\">Ingen data ennaa. Start backend og send en request.</div>";
+      events.innerHTML = "";
+      addEvent("Visning nullstilt.");
+    }
+
+    sendBtn.addEventListener("click", sendRequest);
+    resetBtn.addEventListener("click", resetView);
+
+    addEvent("Demo klar. Start backend paa samme origin foer du tester.");
+  </script>
+</body>
+</html>
