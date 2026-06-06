@@ -3,27 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Statistikkbanken Demo</title>
+  <title>Matematikkfag i fokus</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f3f0e7;
-      --paper: #fffdf7;
-      --ink: #1e241f;
-      --muted: #5f6a62;
-      --line: #d7d8cd;
-      --accent: #0f7666;
+      --bg: #f7efe0;
+      --paper: #fffdf8;
+      --ink: #1f231d;
+      --muted: #5a6058;
+      --line: #d8d7cb;
+      --accent: #115f57;
+      --accent-soft: #d8efe7;
       --danger: #a2362c;
       --ok: #1d7d3d;
-      --radius: 14px;
-      --shadow: 0 14px 34px rgba(33, 44, 37, 0.1);
+      --radius: 16px;
+      --shadow: 0 18px 44px rgba(42, 34, 16, 0.14);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -31,9 +30,10 @@
       font-family: Manrope, "Segoe UI", sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at 12% 14%, rgba(15, 118, 102, 0.24), transparent 30%),
-        radial-gradient(circle at 88% 10%, rgba(253, 214, 144, 0.35), transparent 26%),
-        linear-gradient(155deg, #f7f4ec, #ebe6d7);
+        radial-gradient(circle at 8% 12%, rgba(17, 95, 87, 0.3), transparent 32%),
+        radial-gradient(circle at 88% 0%, rgba(255, 173, 75, 0.34), transparent 30%),
+        radial-gradient(circle at 30% 100%, rgba(255, 247, 220, 0.55), transparent 40%),
+        linear-gradient(145deg, #f4ecdc, #e8dfc9);
       padding: 18px;
     }
 
@@ -54,10 +54,18 @@
       overflow: hidden;
     }
 
+    .primary-showcase {
+      border: 0;
+      background:
+        radial-gradient(circle at 90% 5%, rgba(255, 224, 173, 0.66), transparent 34%),
+        linear-gradient(165deg, #fffdf7 0%, #f8f3e5 52%, #f2ead8 100%);
+      box-shadow: 0 20px 54px rgba(52, 44, 27, 0.14);
+    }
+
     .panel-head {
       padding: 14px 16px;
       border-bottom: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.2));
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.35));
       display: flex;
       justify-content: space-between;
       gap: 8px;
@@ -65,39 +73,321 @@
     }
 
     .panel-head h1,
-    .panel-head h2 {
-      margin: 0;
-      font-size: 1.08rem;
-      letter-spacing: 0.2px;
+    .panel-head h2 { margin: 0; font-size: 1.08rem; letter-spacing: 0.2px; }
+    .panel-head p { margin: 2px 0 0; color: var(--muted); font-size: 0.86rem; }
+
+    .primary-showcase .panel-head {
+      padding: 32px 28px 12px;
+      border-bottom: 0;
+      background: transparent;
+      align-items: flex-start;
     }
 
-    .panel-head p {
-      margin: 2px 0 0;
+    .primary-showcase .panel-head h1 {
+      font-size: clamp(1.7rem, 3.1vw, 2.7rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      max-width: 18ch;
+    }
+
+    .primary-showcase .panel-head p {
+      margin-top: 10px;
+      font-size: 1rem;
+      max-width: 56ch;
+      color: #495349;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 11px;
+      border: 1px solid #b9d4c7;
+      background: rgba(255, 255, 255, 0.74);
+      color: #245147;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .panel-body { padding: 14px; display: grid; gap: 12px; }
+
+    .primary-showcase .panel-body {
+      padding: 10px 28px 28px;
+      gap: 16px;
+    }
+
+    .status { font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+    .status.ok { color: var(--ok); }
+    .status.err { color: var(--danger); }
+
+    .primary-showcase .status {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid #ccd9d0;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.78rem;
+      color: #3e5f52;
+    }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+
+    .summary-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px;
+      background: #fff;
+    }
+
+    .primary-showcase .summary-card {
+      border-color: #cddccf;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(2px);
+    }
+
+    .summary-card .key {
+      font-size: 0.74rem;
       color: var(--muted);
-      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
     }
 
-    .panel-body {
+    .summary-card .val { margin-top: 6px; font-size: 1.08rem; font-weight: 800; }
+
+    .school-info {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(145deg, #ffffff, #f7fbf9);
+      padding: 12px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .primary-showcase .school-info {
+      border-color: #cddccf;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .school-title { font-size: 1.02rem; font-weight: 800; margin: 0; }
+    .school-meta { margin: 0; color: var(--muted); font-size: 0.9rem; }
+
+    .subject-list {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .subject-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 11px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .primary-showcase .subject-card {
+      border-color: #c9ddd1;
+      background: linear-gradient(165deg, #ffffff 10%, #f2f8f4 100%);
+      box-shadow: 0 8px 20px rgba(19, 63, 49, 0.08);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .primary-showcase .subject-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 13px 26px rgba(19, 63, 49, 0.13);
+    }
+
+    .subject-name { margin: 0; font-size: 0.94rem; font-weight: 700; line-height: 1.3; }
+    .subject-meta { margin-top: 4px; font-size: 0.82rem; color: var(--muted); }
+
+    .grade-pill {
+      min-width: 76px;
+      text-align: center;
+      border-radius: 999px;
+      border: 1px solid #b8dfd4;
+      background: var(--accent-soft);
+      color: #0a6b55;
+      padding: 8px 11px;
+      font-size: 1.04rem;
+      font-weight: 800;
+    }
+
+    .primary-showcase .grade-pill {
+      background: #115f57;
+      border-color: #115f57;
+      color: #f4fff9;
+    }
+
+    .illus {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #ffffff, #eef8f3);
+      padding: 10px;
+    }
+
+    .primary-showcase .illus {
+      border-color: #c7d9ce;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+      padding: 12px;
+    }
+
+    .illus svg { width: 100%; height: auto; display: block; }
+    .small-note { margin: 6px 0 0; color: var(--muted); font-size: 0.82rem; }
+
+    .field { display: grid; gap: 5px; }
+
+    .filter-strip {
+      border: 1px solid #b7d2c5;
+      border-radius: 16px;
+      background: linear-gradient(165deg, rgba(231, 245, 239, 0.96), rgba(216, 237, 228, 0.88));
       padding: 14px;
+      display: grid;
+      gap: 10px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+    }
+
+    .filter-strip-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-strip-head h3 {
+      margin: 0;
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #2d4e42;
+    }
+
+    .filter-chip {
+      border-radius: 999px;
+      border: 1px solid #9fc0b1;
+      background: #eaf6f1;
+      padding: 4px 10px;
+      font-size: 0.73rem;
+      font-weight: 700;
+      color: #2d5446;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .filter-card {
+      border: 1px solid #bfd8cc;
+      border-radius: 12px;
+      padding: 10px;
+      background: linear-gradient(170deg, #fefefd 8%, #f1f8f4 100%);
+      display: grid;
+      gap: 6px;
+    }
+
+    .filter-card label {
+      font-size: 0.74rem;
+      color: #4e6359;
+    }
+
+    .filter-card select {
+      width: 100%;
+      font: inherit;
+      color: inherit;
+      border-radius: 10px;
+      border: 1px solid #b9d1c5;
+      padding: 9px 10px;
+      background: #ffffff;
+    }
+
+    .output-zone {
+      margin-top: 8px;
+      padding-top: 16px;
+      border-top: 1px solid #d6d6cb;
       display: grid;
       gap: 12px;
     }
 
-    .controls {
+    .output-summary {
+      border: 1px solid #cfd4c9;
+      border-radius: 14px;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.94), rgba(247, 245, 236, 0.98));
+      padding: 13px;
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 9px;
-    }
-
-    .field {
-      display: grid;
-      gap: 5px;
-    }
-
-    .field.inline {
-      grid-template-columns: 150px 1fr;
-      align-items: center;
       gap: 10px;
+      box-shadow: 0 10px 24px rgba(71, 74, 62, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.42);
+    }
+
+    .output-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .output-summary-main,
+    .output-summary-stat {
+      border-radius: 12px;
+      border: 1px solid #d4d5ca;
+      background: rgba(255, 255, 255, 0.82);
+      padding: 10px 11px;
+    }
+
+    .output-summary-main {
+      grid-column: 1 / -1;
+      border-color: #adc6b7;
+      background: linear-gradient(165deg, rgba(233, 245, 238, 0.98), rgba(255, 255, 255, 0.88));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+      padding: 14px 14px 13px;
+      display: grid;
+      gap: 4px;
+      align-content: center;
+    }
+
+    .output-summary-stat {
+      display: grid;
+      gap: 6px;
+      align-content: center;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 9px 10px;
+    }
+
+    .output-summary .key {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6a6f63;
+      font-weight: 700;
+    }
+
+    .output-summary-main .key {
+      font-size: 0.76rem;
+      color: #466357;
+    }
+
+    .output-summary-main .school-title {
+      font-size: 1.18rem;
+      letter-spacing: -0.01em;
+      color: #173b32;
+    }
+
+    .output-summary-main .school-meta {
+      color: #5a6f66;
+    }
+
+    .output-summary-stat .val {
+      font-size: 1rem;
     }
 
     label {
@@ -108,9 +398,7 @@
       text-transform: uppercase;
     }
 
-    input,
-    textarea,
-    button {
+    input, textarea, button {
       width: 100%;
       font: inherit;
       color: inherit;
@@ -118,11 +406,7 @@
       border: 1px solid var(--line);
     }
 
-    input,
-    textarea {
-      padding: 10px;
-      background: #fff;
-    }
+    input, textarea { padding: 10px; background: #fff; }
 
     textarea {
       min-height: 108px;
@@ -132,121 +416,53 @@
       line-height: 1.4;
     }
 
-    .row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-      align-items: end;
+    #payload.payload-updated {
+      border-color: #1d8874;
+      box-shadow: 0 0 0 3px rgba(29, 136, 116, 0.18);
+      animation: payloadPulse 900ms ease;
     }
 
-    .buttons {
-      display: flex;
-      gap: 8px;
+    .payload-change-hint {
+      margin: 2px 2px 0;
+      font-size: 0.77rem;
+      color: #5c635c;
+      min-height: 1.2em;
     }
+
+    .payload-change-hint.active {
+      color: #115f57;
+      font-weight: 700;
+    }
+
+    @keyframes payloadPulse {
+      0% { background: #fff; }
+      35% { background: #e9f7f2; }
+      100% { background: #fff; }
+    }
+
+    .url-field {
+      min-height: 64px;
+      resize: none;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .button-row { display: flex; gap: 8px; }
 
     button {
       width: auto;
-      padding: 10px 14px;
       border: 0;
       cursor: pointer;
       font-weight: 800;
       transition: transform 120ms ease;
+      padding: 10px 14px;
     }
 
-    button:hover {
-      transform: translateY(-1px);
-    }
+    button:hover { transform: translateY(-1px); }
 
-    .primary {
-      background: linear-gradient(130deg, #0f7666, #118a77);
-      color: #fff;
-    }
-
-    .secondary {
-      border: 1px solid #cfd7ca;
-      background: #edf3e8;
-      color: #3f5144;
-    }
-
-    .status {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--muted);
-    }
-
-    .status.ok {
-      color: var(--ok);
-    }
-
-    .status.err {
-      color: var(--danger);
-    }
-
-    .kpis {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .kpi {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 10px;
-      background: #fff;
-    }
-
-    .kpi .key {
-      font-size: 0.75rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 700;
-    }
-
-    .kpi .val {
-      margin-top: 6px;
-      font-size: 1.18rem;
-      font-weight: 800;
-    }
-
-    .table-wrap {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      overflow: auto;
-      max-height: 360px;
-      background: #fff;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.84rem;
-    }
-
-    th,
-    td {
-      border-bottom: 1px solid #eceee7;
-      text-align: left;
-      padding: 8px 10px;
-      vertical-align: top;
-    }
-
-    th {
-      position: sticky;
-      top: 0;
-      background: #f6f9f2;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #4e5e52;
-    }
-
-    .empty {
-      padding: 24px;
-      text-align: center;
-      color: var(--muted);
-      font-style: italic;
-    }
+    .primary { background: linear-gradient(130deg, #0f7666, #118a77); color: #fff; }
+    .secondary { border: 1px solid #cfd7ca; background: #edf3e8; color: #3f5144; }
 
     .box {
       border: 1px solid var(--line);
@@ -296,100 +512,180 @@
       line-height: 1.35;
     }
 
-    @media (max-width: 1120px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--muted);
+      padding: 14px;
+      text-align: center;
+      font-style: italic;
+    }
 
-      .kpis {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+    @media (max-width: 1120px) {
+      .layout { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 640px) {
-      body {
-        padding: 10px;
-      }
-
-      .kpis {
-        grid-template-columns: 1fr;
-      }
-
-      .field.inline {
-        grid-template-columns: 1fr;
-      }
+      body { padding: 10px; }
+      .subject-card { grid-template-columns: 1fr; }
+      .filter-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <main class="layout">
-    <section class="panel">
+    <section class="panel primary-showcase">
       <header class="panel-head">
         <div>
-          <h1>Ny statistikk-side (2/3)</h1>
-          <p>Frontend kaller egen backend, ikke UDIR direkte.</p>
+          <span class="eyebrow">Statistikkbanken x matematikk</span>
+          <h1>Fra Statistikkbank til Matematikkbank</h1>
+          <p>En redaksjonell visning av standpunktresultater for matematikkfag studiespesialisering basert pa valgt fylke og kjonn</p>
         </div>
         <span class="status" id="statusText">Klar</span>
       </header>
 
       <div class="panel-body">
-        <section class="controls">
-          <div class="field inline">
-            <label for="radSti">Query parameter radSti</label>
-            <input id="radSti" type="text" value="F" />
+        <section class="illus">
+          <svg viewBox="0 0 900 260" role="img" aria-label="Kunstnerisk abstrakt illustrasjon med matematisk inspirasjon">
+            <defs>
+              <linearGradient id="canvasGlow" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#fffef9"></stop>
+                <stop offset="50%" stop-color="#f3f5ef"></stop>
+                <stop offset="100%" stop-color="#ecefe7"></stop>
+              </linearGradient>
+              <linearGradient id="lineFade" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#124d46" stop-opacity="0.08"></stop>
+                <stop offset="100%" stop-color="#124d46" stop-opacity="0.44"></stop>
+              </linearGradient>
+              <radialGradient id="orbWarm" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0%" stop-color="#ffd8a1"></stop>
+                <stop offset="100%" stop-color="#f39b52"></stop>
+              </radialGradient>
+              <radialGradient id="orbCool" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0%" stop-color="#d8f1e8"></stop>
+                <stop offset="100%" stop-color="#8fc7b5"></stop>
+              </radialGradient>
+            </defs>
+
+            <rect x="0" y="0" width="900" height="260" rx="18" fill="url(#canvasGlow)"></rect>
+
+            <g opacity="0.4">
+              <path d="M30 52 C142 25, 254 28, 362 52" fill="none" stroke="url(#lineFade)" stroke-width="2"></path>
+              <path d="M30 82 C158 108, 282 108, 394 82" fill="none" stroke="url(#lineFade)" stroke-width="2"></path>
+              <path d="M30 112 C145 84, 270 86, 402 112" fill="none" stroke="url(#lineFade)" stroke-width="2"></path>
+              <path d="M30 142 C160 170, 282 170, 422 142" fill="none" stroke="url(#lineFade)" stroke-width="2"></path>
+            </g>
+
+            <circle cx="632" cy="136" r="92" fill="none" stroke="#1f6c62" stroke-opacity="0.18" stroke-width="2"></circle>
+            <circle cx="632" cy="136" r="62" fill="none" stroke="#1f6c62" stroke-opacity="0.24" stroke-width="2"></circle>
+            <circle cx="632" cy="136" r="28" fill="#115f57" fill-opacity="0.9"></circle>
+
+            <path d="M486 206 C552 144, 566 134, 632 136" fill="none" stroke="#115f57" stroke-width="3" stroke-linecap="round"></path>
+            <path d="M632 136 C708 136, 750 116, 826 76" fill="none" stroke="#115f57" stroke-opacity="0.62" stroke-width="3" stroke-linecap="round"></path>
+
+            <ellipse cx="496" cy="206" rx="34" ry="18" fill="url(#orbWarm)"></ellipse>
+            <ellipse cx="826" cy="76" rx="30" ry="16" fill="url(#orbCool)"></ellipse>
+
+            <g opacity="0.78">
+              <path d="M468 56 L520 40 L575 64 L562 112 L505 130 L454 98 Z" fill="#edf5f1" stroke="#9cbfb2" stroke-width="2"></path>
+              <path d="M510 84 L534 74 L558 88 L552 110 L528 120 L506 104 Z" fill="#b5d9cb" stroke="#1f6c62" stroke-width="2"></path>
+            </g>
+
+          </svg>
+        </section>
+
+        <section class="filter-strip" aria-label="Filterseksjon">
+          <div class="filter-strip-head">
+            <h3>Filtrer visning</h3>
+            <span class="filter-chip">Klar for neste steg</span>
           </div>
 
-          <div class="field">
-            <label for="payload">Payload til backend</label>
-            <textarea id="payload" spellcheck="false"></textarea>
-          </div>
+          <div class="filter-grid">
+            <article class="filter-card">
+              <label for="filterFylke">Fylke</label>
+              <select id="filterFylke" aria-label="Filter for fylke">
+                <option>Alle fylker</option>
+                <option>Oslo</option>
+                <option>Akershus</option>
+                <option>Vestland</option>
+                <option>Trondelag</option>
+              </select>
+            </article>
 
-          <div class="row">
-            <div class="field">
-              <label>Frontend - backend</label>
-              <input type="text" value="POST /api/statistikk" disabled />
+            <article class="filter-card">
+              <label for="filterKjonn">Kjonn</label>
+              <select id="filterKjonn" aria-label="Filter for kjonn">
+                <option>Alle</option>
+                <option>Jenter</option>
+                <option>Gutter</option>
+              </select>
+            </article>
+          </div>
+        </section>
+
+        <section class="output-zone" aria-label="Outputseksjon">
+          <section class="output-summary" aria-label="Oppsummering av visning">
+            <div class="output-summary-grid">
+              <div class="output-summary-main">
+                <div class="school-title" id="schoolName">Fylke: Alle fylker</div>
+                <div class="school-meta" id="schoolMeta">Kjonn: Alle</div>
+              </div>
+
+              <article class="output-summary-stat">
+                <div class="key">Fag i visning</div>
+                <div class="val" id="statSubjects">-</div>
+              </article>
+              <article class="output-summary-stat">
+                <div class="key">Snittkarakter</div>
+                <div class="val" id="statAverage">-</div>
+              </article>
+              <article class="output-summary-stat">
+                <div class="key">Elever totalt</div>
+                <div class="val" id="statStudents">-</div>
+              </article>
             </div>
-            <div class="buttons">
-              <button class="primary" id="sendBtn" type="button">Send request</button>
-              <button class="secondary" id="resetBtn" type="button">Reset</button>
-            </div>
-          </div>
+          </section>
+
+          <section id="subjectList" class="subject-list">
+            <div class="empty">Trykk "Hent data" i teknisk panel for aa vise matematikkfag.</div>
+          </section>
         </section>
 
-        <section class="kpis">
-          <article class="kpi">
-            <div class="key">HTTP status</div>
-            <div class="val" id="kpiStatus">-</div>
-          </article>
-          <article class="kpi">
-            <div class="key">Tid</div>
-            <div class="val" id="kpiTime">-</div>
-          </article>
-          <article class="kpi">
-            <div class="key">Rader</div>
-            <div class="val" id="kpiRows">-</div>
-          </article>
-          <article class="kpi">
-            <div class="key">Nokler</div>
-            <div class="val" id="kpiKeys">-</div>
-          </article>
-        </section>
-
-        <section class="table-wrap" id="tableWrap">
-          <div class="empty">Ingen data ennaa. Start backend og send en request.</div>
-        </section>
       </div>
     </section>
 
     <aside class="panel">
       <header class="panel-head">
         <div>
-          <h2>Under panseret (1/3)</h2>
-          <p>Viser request til backend og response tilbake.</p>
+          <h2>Under panseret (teknisk)</h2>
+          <p>Kontroller, request/response og transformasjon.</p>
         </div>
       </header>
 
       <div class="panel-body">
+        <section class="field">
+          <label for="requestUrl">Url</label>
+          <textarea id="requestUrl" class="url-field" spellcheck="false" readonly>https://statistikkportalen.udir.no/api/rapportering/rest/v1/Statistikk/VGO/ResultatFagV/2/5/data</textarea>
+        </section>
+
+        <section class="field">
+          <label for="queryValue">Query parameter</label>
+          <input id="queryValue" type="text" value="F" />
+        </section>
+
+        <section class="field">
+          <label for="payload">Payload</label>
+          <textarea id="payload" spellcheck="false"></textarea>
+          <p id="payloadChangeHint" class="payload-change-hint">Ingen payload-endring ennå.</p>
+        </section>
+
+        <div class="button-row">
+          <button class="primary" id="sendBtn" type="button">Hent data</button>
+          <button class="secondary" id="resetBtn" type="button">Reset</button>
+        </div>
+
         <section class="box">
           <h3>Request</h3>
           <pre id="requestView">Ingen request sendt.</pre>
@@ -419,17 +715,22 @@
   </main>
 
   <script>
-    const radStiInput = document.getElementById("radSti");
+    const requestUrlInput = document.getElementById("requestUrl");
+    const queryValueInput = document.getElementById("queryValue");
     const payloadInput = document.getElementById("payload");
+    const payloadChangeHint = document.getElementById("payloadChangeHint");
     const sendBtn = document.getElementById("sendBtn");
     const resetBtn = document.getElementById("resetBtn");
 
     const statusText = document.getElementById("statusText");
-    const kpiStatus = document.getElementById("kpiStatus");
-    const kpiTime = document.getElementById("kpiTime");
-    const kpiRows = document.getElementById("kpiRows");
-    const kpiKeys = document.getElementById("kpiKeys");
-    const tableWrap = document.getElementById("tableWrap");
+    const schoolName = document.getElementById("schoolName");
+    const schoolMeta = document.getElementById("schoolMeta");
+    const filterFylke = document.getElementById("filterFylke");
+    const filterKjonn = document.getElementById("filterKjonn");
+    const statSubjects = document.getElementById("statSubjects");
+    const statAverage = document.getElementById("statAverage");
+    const statStudents = document.getElementById("statStudents");
+    const subjectList = document.getElementById("subjectList");
 
     const requestView = document.getElementById("requestView");
     const metaView = document.getElementById("metaView");
@@ -437,7 +738,7 @@
     const transformView = document.getElementById("transformView");
     const events = document.getElementById("events");
 
-    payloadInput.value = "EierformID(-10)_EnhetID(*)_FagID(-12_6457_30980_32127)_KaraktertypeID(1)_KjoennID(-10)_TidID(202506)_UtdanningsprogramvariantID(-10)_VisAntallPersoner(1)_VisKarakterfordeling(0)";
+    payloadInput.value = "EierformID(-10)_EnhetID(*)_FagID(-22_-12_30118_30119_30980_31572_31574_31576_31578)_KaraktertypeID(1)_KjoennID(-10)_TidID(202506)_UtdanningsprogramvariantID(13)_VisAntallPersoner(1)_VisKarakterfordeling(0)";
 
     function addEvent(message) {
       const ts = new Date().toLocaleTimeString("no-NO");
@@ -462,22 +763,6 @@
       }
     }
 
-    function getRows(payload) {
-      if (Array.isArray(payload)) {
-        return payload;
-      }
-      if (!payload || typeof payload !== "object") {
-        return [];
-      }
-      const keys = ["data", "value", "items", "results", "dataset", "observations", "tabell"];
-      for (const key of keys) {
-        if (Array.isArray(payload[key])) {
-          return payload[key];
-        }
-      }
-      return [payload];
-    }
-
     function escapeHtml(value) {
       return String(value)
         .replaceAll("&", "&amp;")
@@ -487,40 +772,327 @@
         .replaceAll("'", "&#039;");
     }
 
-    function renderTable(rows) {
-      if (!rows.length || typeof rows[0] !== "object") {
-        tableWrap.innerHTML = "<div class=\"empty\">Fant ingen tabellignende data i responsen.</div>";
-        kpiRows.textContent = "0";
-        kpiKeys.textContent = "0";
+    function parseNorwegianNumber(input) {
+      if (input == null) {
+        return NaN;
+      }
+      const normalized = String(input).replace(/\s/g, "").replace(",", ".");
+      return Number(normalized);
+    }
+
+    function parsePayloadMeta(payloadText) {
+      const enhetMatch = payloadText.match(/EnhetID\(([^)]+)\)/);
+      const kjonnMatch = payloadText.match(/KjoennID\(([^)]+)\)/);
+      const tidMatch = payloadText.match(/TidID\(([^)]+)\)/);
+
+      const enhet = enhetMatch ? enhetMatch[1] : "*";
+      const kjonnCode = kjonnMatch ? kjonnMatch[1] : "-10";
+      const tid = tidMatch ? tidMatch[1] : "ukjent";
+
+      const kjonnMap = {
+        "-10": "Alle",
+        "1": "Gutter",
+        "2": "Jenter"
+      };
+
+      return {
+        enhet,
+        kjonnText: kjonnMap[kjonnCode] || ("Kode " + kjonnCode),
+        tid
+      };
+    }
+
+    function getSubjectRows(payload, selectedFylkeName) {
+      if (!payload || typeof payload !== "object" || !Array.isArray(payload.rows)) {
+        return [];
+      }
+
+      if (selectedFylkeName) {
+        const subjectNameById = new Map();
+
+        payload.rows.forEach((row) => {
+          if (!row || typeof row !== "object") {
+            return;
+          }
+          const id = String(row.id ?? "");
+          const idDepth = id ? id.split(".").length : 0;
+          if (idDepth === 1 && !id.startsWith("-")) {
+            subjectNameById.set(id, String(row.navn ?? "Ukjent fag"));
+          }
+        });
+
+        const subjectRowsById = new Map();
+
+        payload.rows.forEach((row) => {
+          if (!row || typeof row !== "object") {
+            return;
+          }
+
+          const id = String(row.id ?? "");
+          if (!id || !id.includes(".")) {
+            return;
+          }
+
+          const parts = id.split(".");
+          const subjectId = parts[0];
+          if (!subjectNameById.has(subjectId)) {
+            return;
+          }
+
+          const rowName = String(row.navn ?? "").trim();
+          if (rowName !== selectedFylkeName) {
+            return;
+          }
+
+          // County rows live below the national node: subjectId.1.<county...>
+          if (parts.length < 3 || parts[1] !== "1") {
+            return;
+          }
+
+          const gradeText = Array.isArray(row.data) ? String(row.data[0] ?? "") : "";
+          const studentsText = Array.isArray(row.data) ? String(row.data[1] ?? "") : "";
+          const gradeNum = parseNorwegianNumber(gradeText);
+          const studentsNum = parseNorwegianNumber(studentsText);
+          const depth = parts.length;
+
+          if (!subjectRowsById.has(subjectId)) {
+            subjectRowsById.set(subjectId, {
+              name: subjectNameById.get(subjectId),
+              id: subjectId,
+              gradeText,
+              gradeNum,
+              studentsText,
+              studentsNum,
+              priority: Number.isFinite(gradeNum) || Number.isFinite(studentsNum) ? 1 : 0,
+              depth
+            });
+            return;
+          }
+
+          const existing = subjectRowsById.get(subjectId);
+          const candidatePriority = Number.isFinite(gradeNum) || Number.isFinite(studentsNum) ? 1 : 0;
+          if (candidatePriority > existing.priority || (candidatePriority === existing.priority && depth < existing.depth)) {
+            existing.gradeText = gradeText;
+            existing.gradeNum = gradeNum;
+            existing.studentsText = studentsText;
+            existing.studentsNum = studentsNum;
+            existing.priority = candidatePriority;
+            existing.depth = depth;
+          }
+        });
+
+        const countyRows = Array.from(subjectRowsById.values()).map((row) => {
+          const cleaned = { ...row };
+          delete cleaned.priority;
+          delete cleaned.depth;
+          return cleaned;
+        });
+
+        if (countyRows.length) {
+          return countyRows;
+        }
+      }
+
+      return payload.rows
+        .filter((row) => {
+          if (!row || typeof row !== "object") {
+            return false;
+          }
+          const id = String(row.id ?? "");
+          const idDepth = id ? id.split(".").length : 0;
+          const isRootSubject = idDepth === 1 && !id.startsWith("-");
+          return isRootSubject;
+        })
+        .map((row) => {
+          const gradeText = Array.isArray(row.data) ? String(row.data[0] ?? "") : "";
+          const studentsText = Array.isArray(row.data) ? String(row.data[1] ?? "") : "";
+          return {
+            name: String(row.navn ?? "Ukjent fag"),
+            id: String(row.id ?? ""),
+            gradeText,
+            gradeNum: parseNorwegianNumber(gradeText),
+            studentsText,
+            studentsNum: parseNorwegianNumber(studentsText)
+          };
+        });
+    }
+
+    function renderSubjectCards(subjectRows) {
+      if (!subjectRows.length) {
+        subjectList.innerHTML = "<div class=\"empty\">Fant ingen fagrader i response body rows.</div>";
+        statSubjects.textContent = "0";
+        statAverage.textContent = "-";
+        statStudents.textContent = "-";
         transformView.textContent = pretty({
-          note: "Responsen var ikke en liste med objekt-rader.",
-          rowsDetected: rows.length
+          note: "Forventet fagrader pa toppniva i payload.body.rows.",
+          rowsDetected: 0
         });
         return;
       }
 
-      const columns = Object.keys(rows[0]).slice(0, 10);
-      const topRows = rows.slice(0, 30);
-      const head = columns.map((col) => "<th>" + escapeHtml(col) + "</th>").join("");
-      const body = topRows.map((row) => {
-        const tds = columns.map((col) => "<td>" + escapeHtml(row[col] ?? "") + "</td>").join("");
-        return "<tr>" + tds + "</tr>";
+      const validGrades = subjectRows.filter((row) => Number.isFinite(row.gradeNum));
+      const avg = validGrades.length
+        ? (validGrades.reduce((sum, row) => sum + row.gradeNum, 0) / validGrades.length).toFixed(2).replace(".", ",")
+        : "-";
+
+      const validStudents = subjectRows.filter((row) => Number.isFinite(row.studentsNum));
+      const studentsTotal = validStudents.length
+        ? validStudents.reduce((sum, row) => sum + row.studentsNum, 0).toLocaleString("no-NO")
+        : "-";
+
+      subjectList.innerHTML = subjectRows.map((row) => {
+        return "<article class='subject-card'>" +
+          "<div>" +
+          "<p class='subject-name'>" + escapeHtml(row.name) + "</p>" +
+          "<div class='subject-meta'>Antall elever: " + escapeHtml(row.studentsText || "-") + " | Fag-ID: " + escapeHtml(row.id) + "</div>" +
+          "</div>" +
+          "<div class='grade-pill'>" + escapeHtml(row.gradeText || "-") + "</div>" +
+          "</article>";
       }).join("");
 
-      tableWrap.innerHTML = "<table><thead><tr>" + head + "</tr></thead><tbody>" + body + "</tbody></table>";
-      kpiRows.textContent = String(rows.length);
-      kpiKeys.textContent = String(columns.length);
+      statSubjects.textContent = String(subjectRows.length);
+      statAverage.textContent = avg;
+      statStudents.textContent = studentsTotal;
+
       transformView.textContent = pretty({
-        transformRule: "Viser forste array med opptil 30 rader.",
-        rowsDetected: rows.length,
-        columnsShown: columns,
-        sample: rows.slice(0, 3)
+        transformRule: "Filtrerer toppniva-fag (positive id-er uten punktum) og viser snitt + elevtall.",
+        rowsDetected: subjectRows.length,
+        sample: subjectRows.slice(0, 3)
       });
     }
 
+    function updateSelectedFiltersSummary() {
+      const selectedFylke = filterFylke ? (filterFylke.value || "Alle fylker") : "Alle fylker";
+      const selectedKjonn = filterKjonn ? (filterKjonn.value || "Alle") : "Alle";
+      schoolName.textContent = "Fylke: " + selectedFylke;
+      schoolMeta.textContent = "Kjonn: " + selectedKjonn;
+    }
+
+    function updateSchoolHeader(payloadText) {
+      updateSelectedFiltersSummary();
+    }
+
+    function getSelectedFylkeConfig() {
+      const selectedFylke = filterFylke ? (filterFylke.value || "Alle fylker") : "Alle fylker";
+      const map = {
+        "Alle fylker": { payloadCode: "*", rowName: null },
+        "Oslo": { payloadCode: "-17", rowName: "Oslo" },
+        "Akershus": { payloadCode: "-44", rowName: "Akershus" },
+        "Vestland": { payloadCode: "-42", rowName: "Vestland" },
+        "Trondelag": { payloadCode: "-36", rowName: "Trondelag" }
+      };
+      return map[selectedFylke] || map["Alle fylker"];
+    }
+
+    function getSelectedKjonnId() {
+      const selectedKjonn = filterKjonn ? (filterKjonn.value || "Alle") : "Alle";
+      const kjonnToId = {
+        "Alle": "-10",
+        "Jenter": "1",
+        "Gutter": "2"
+      };
+      return kjonnToId[selectedKjonn] || "-10";
+    }
+
+    function applyKjonnToPayload(payloadText) {
+      const kjonnId = getSelectedKjonnId();
+      return replacePayloadPart(payloadText, "KjoennID", kjonnId);
+    }
+
+    function applyFylkeToPayload(payloadText) {
+      const fylkeConfig = getSelectedFylkeConfig();
+      const enhetValue = fylkeConfig.payloadCode === "*"
+        ? "*"
+        : (fylkeConfig.payloadCode + "_-12");
+      return replacePayloadPart(payloadText, "EnhetID", enhetValue);
+    }
+
+    function replacePayloadPart(payloadText, key, value) {
+      const segment = key + "(" + value + ")";
+      const regex = new RegExp(key + "\\([^)]+\\)");
+      const match = payloadText.match(regex);
+
+      if (match) {
+        const start = match.index || 0;
+        const previousValueMatch = match[0].match(/\(([^)]+)\)/);
+        const previousValue = previousValueMatch ? previousValueMatch[1] : "";
+        if (match[0] === segment) {
+          return {
+            text: payloadText,
+            changed: false,
+            range: [start, start + segment.length],
+            segment,
+            key,
+            fromValue: previousValue,
+            toValue: value
+          };
+        }
+
+        const nextText = payloadText.replace(regex, segment);
+        return {
+          text: nextText,
+          changed: true,
+          range: [start, start + segment.length],
+          segment,
+          key,
+          fromValue: previousValue,
+          toValue: value
+        };
+      }
+
+      const separator = payloadText && !payloadText.endsWith("_") ? "_" : "";
+      const start = payloadText.length + separator.length;
+      return {
+        text: payloadText + separator + segment,
+        changed: true,
+        range: [start, start + segment.length],
+        segment,
+        key,
+        fromValue: "(mangler)",
+        toValue: value
+      };
+    }
+
+    function highlightPayloadChanges(changedRanges) {
+      if (!changedRanges.length) {
+        return;
+      }
+
+      payloadInput.classList.remove("payload-updated");
+      void payloadInput.offsetWidth;
+      payloadInput.classList.add("payload-updated");
+
+      const range = changedRanges[changedRanges.length - 1];
+      if (range) {
+        payloadInput.focus();
+        payloadInput.setSelectionRange(range[0], range[1]);
+      }
+
+      setTimeout(() => {
+        payloadInput.classList.remove("payload-updated");
+      }, 1000);
+    }
+
+    function showPayloadChangeHint(changes) {
+      if (!payloadChangeHint || !changes.length) {
+        return;
+      }
+
+      const uniqueMessages = Array.from(new Set(changes.map((change) => {
+        return change.key + ": " + change.fromValue + " -> " + change.toValue;
+      })));
+      payloadChangeHint.textContent = "Endret: " + uniqueMessages.join(" | ");
+      payloadChangeHint.classList.add("active");
+    }
+
     async function sendRequest() {
-      const radSti = radStiInput.value.trim() || "F";
-      const payload = payloadInput.value.trim();
+      const radSti = queryValueInput.value.trim() || "F";
+      const rawPayload = payloadInput.value.trim();
+      const fylkePayloadResult = applyFylkeToPayload(rawPayload);
+      const kjonnPayloadResult = applyKjonnToPayload(fylkePayloadResult.text);
+      const payload = kjonnPayloadResult.text;
+      const selectedFylkeConfig = getSelectedFylkeConfig();
+      const requestUrl = requestUrlInput.value.trim() || "https://statistikkportalen.udir.no/api/rapportering/rest/v1/Statistikk/VGO/ResultatFagV/2/5/data";
 
       if (!payload) {
         setStatus("Mangler payload", "err");
@@ -528,9 +1100,32 @@
         return;
       }
 
+      if (payload !== rawPayload) {
+        payloadInput.value = payload;
+        const changedRanges = [];
+        const changeDetails = [];
+        if (fylkePayloadResult.changed) {
+          changedRanges.push(fylkePayloadResult.range);
+          changeDetails.push(fylkePayloadResult);
+        }
+        if (kjonnPayloadResult.changed) {
+          changedRanges.push(kjonnPayloadResult.range);
+          changeDetails.push(kjonnPayloadResult);
+        }
+        highlightPayloadChanges(changedRanges);
+        showPayloadChangeHint(changeDetails);
+      }
+
+      updateSchoolHeader(payload);
+
       const requestModel = {
         method: "POST",
-        url: "/api/statistikk",
+        url: requestUrl,
+        queryParameter: {
+          key: "radSti",
+          value: radSti
+        },
+        proxyPath: "/api/statistikk",
         body: {
           radSti,
           payload
@@ -557,34 +1152,32 @@
         const ms = Math.round(end - start);
         const json = await response.json();
         const payloadBody = json.body;
-        const rows = getRows(payloadBody);
+        const subjectRows = getSubjectRows(payloadBody, selectedFylkeConfig.rowName);
 
-        kpiStatus.textContent = String(response.status);
-        kpiTime.textContent = ms + " ms";
         bodyView.textContent = pretty(payloadBody);
         metaView.textContent = pretty({
           backendStatus: response.status,
           durationMs: ms,
           upstream: json.upstream
         });
-        renderTable(rows);
+
+        renderSubjectCards(subjectRows);
 
         if (response.ok) {
           setStatus("Oppdatert", "ok");
-          addEvent("Backend svarte OK og UI ble oppdatert.");
+          addEvent("Backend svarte OK og fagvisning ble oppdatert.");
         } else {
           setStatus("Backend-feil", "err");
           addEvent("Backend svarte med HTTP " + response.status + ".");
         }
       } catch (error) {
-        kpiStatus.textContent = "-";
-        kpiTime.textContent = "-";
-        kpiRows.textContent = "-";
-        kpiKeys.textContent = "-";
         metaView.textContent = pretty({ error: error.message });
         bodyView.textContent = "Ingen response body. Sjekk at backend kjorer.";
+        subjectList.innerHTML = "<div class='empty'>Klarte ikke hente data fra backend.</div>";
         transformView.textContent = "Ingen transformasjon pga feil.";
-        tableWrap.innerHTML = "<div class=\"empty\">Klarte ikke hente data fra backend.</div>";
+        statSubjects.textContent = "-";
+        statAverage.textContent = "-";
+        statStudents.textContent = "-";
         setStatus("Request feilet", "err");
         addEvent("Frontend klarte ikke naa backend: " + error.message);
       }
@@ -592,23 +1185,45 @@
 
     function resetView() {
       setStatus("Klar", "");
-      kpiStatus.textContent = "-";
-      kpiTime.textContent = "-";
-      kpiRows.textContent = "-";
-      kpiKeys.textContent = "-";
+      schoolName.textContent = "Skole/enhet: Ikke valgt";
+      schoolMeta.textContent = "Kjonn: Alle | Periode: Ukjent";
+      statSubjects.textContent = "-";
+      statAverage.textContent = "-";
+      statStudents.textContent = "-";
+      subjectList.innerHTML = "<div class='empty'>Ingen data ennaa. Start backend og send en request.</div>";
       requestView.textContent = "Ingen request sendt.";
       metaView.textContent = "Ingen response mottatt.";
       bodyView.textContent = "Ingen payload ennaa.";
       transformView.textContent = "Ingen transformasjon ennaa.";
-      tableWrap.innerHTML = "<div class=\"empty\">Ingen data ennaa. Start backend og send en request.</div>";
       events.innerHTML = "";
+      if (payloadChangeHint) {
+        payloadChangeHint.textContent = "Ingen payload-endring ennå.";
+        payloadChangeHint.classList.remove("active");
+      }
       addEvent("Visning nullstilt.");
     }
 
     sendBtn.addEventListener("click", sendRequest);
     resetBtn.addEventListener("click", resetView);
+    if (filterFylke) {
+      filterFylke.addEventListener("change", () => {
+        updateSelectedFiltersSummary();
+        addEvent("Filter endret: fylke. Oppdaterer payload og henter nye data.");
+        sendRequest();
+      });
+    }
+    if (filterKjonn) {
+      filterKjonn.addEventListener("change", () => {
+        updateSelectedFiltersSummary();
+        addEvent("Filter endret: kjonn. Oppdaterer payload og henter nye data.");
+        sendRequest();
+      });
+    }
 
-    addEvent("Demo klar. Start backend paa samme origin foer du tester.");
+    updateSelectedFiltersSummary();
+
+    addEvent("Demo klar. Henter standardvisning (Alle fylker, Alle kjonn).");
+    sendRequest();
   </script>
 </body>
 </html>
