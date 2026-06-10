@@ -51,6 +51,9 @@ async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
+import json
+import os
+
 @app.post("/api/statistikk")
 async def statistikk(request: StatisticsRequest) -> JSONResponse:
     upstream_url = httpx.URL(UDIR_API_URL).copy_merge_params({"radSti": request.radSti})
@@ -88,3 +91,10 @@ async def statistikk(request: StatisticsRequest) -> JSONResponse:
             "rawText": response_text,
         },
     )
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    port = int(os.environ.get("PORT", "8000"))
+    uvicorn.run("app:app", host="0.0.0.0", port=port)
