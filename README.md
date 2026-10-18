@@ -62,7 +62,9 @@ Deretter kan du koble repoet til din egen GitHub remote og pushe dit.
 
 ## Azure
 
-Dette oppsettet passer som et enkelt utgangspunkt for deploy til Azure App Service.
+Applikasjonen er hostet i Azure App Service og er tilgjengelig på:
+[https://alternativ-statistikkbank.azurewebsites.net](https://alternativ-statistikkbank.azurewebsites.net).
+
 Senere kan du legge til:
 - produksjonsorigins i CORS-oppsettet
 - mer robust logging
