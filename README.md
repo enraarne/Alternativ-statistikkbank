@@ -63,7 +63,7 @@ Deretter kan du koble repoet til din egen GitHub remote og pushe dit.
 ## Azure
 
 Applikasjonen er hostet i Azure App Service og er tilgjengelig på:
-[https://alternativ-statistikkbank.azurewebsites.net](https://alternativ-statistikkbank.azurewebsites.net).
+[https://alternativ-statistikkbank-dvhjcjaqg8ate6e6.norwayeast-01.azurewebsites.net](https://alternativ-statistikkbank-dvhjcjaqg8ate6e6.norwayeast-01.azurewebsites.net).
 
 Senere kan du legge til:
 - produksjonsorigins i CORS-oppsettet
